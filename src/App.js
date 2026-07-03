@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 const formatCurrency = (val) =>
@@ -140,37 +139,37 @@ function calcMaxHomePrice(monthlyTakeHome, allOtherExpenses, totalSavings, inter
 
 export default function HomeAffordability() {
   // Income & loan
-  const [paycheckAmount, setPaycheckAmount] = useState(2500);
+  const [paycheckAmount, setPaycheckAmount] = useState(0);
   const [paycheckFrequency, setPaycheckFrequency] = useState("biweekly"); // weekly | biweekly | semimonthly | monthly
   const income = paycheckFrequency === "weekly" ? paycheckAmount * 52
     : paycheckFrequency === "biweekly" ? paycheckAmount * 26
     : paycheckFrequency === "semimonthly" ? paycheckAmount * 24
     : paycheckAmount * 12;
-  const [homePrice, setHomePrice] = useState(350000);
-  const [downPayment, setDownPayment] = useState(70000);
-  const [interestRate, setInterestRate] = useState(6.8);
+  const [homePrice, setHomePrice] = useState(0);
+  const [downPayment, setDownPayment] = useState(0);
+  const [interestRate, setInterestRate] = useState(0);
   const [loanTerm, setLoanTerm] = useState(30);
   // Home costs
-  const [propertyTax, setPropertyTax] = useState(350);
-  const [homeInsurance, setHomeInsurance] = useState(120);
+  const [propertyTax, setPropertyTax] = useState(0);
+  const [homeInsurance, setHomeInsurance] = useState(0);
   const [hoa, setHoa] = useState(0);
-  const [maintenance, setMaintenance] = useState(200);
+  const [maintenance, setMaintenance] = useState(0);
   // Transport
-  const [carPayment, setCarPayment] = useState(400);
-  const [carInsurance, setCarInsurance] = useState(150);
-  const [gas, setGas] = useState(150);
+  const [carPayment, setCarPayment] = useState(0);
+  const [carInsurance, setCarInsurance] = useState(0);
+  const [gas, setGas] = useState(0);
   // Bills
-  const [phone, setPhone] = useState(100);
-  const [electric, setElectric] = useState(120);
-  const [gasUtil, setGasUtil] = useState(60);
-  const [water, setWater] = useState(50);
-  const [internet, setInternet] = useState(70);
+  const [phone, setPhone] = useState(0);
+  const [electric, setElectric] = useState(0);
+  const [gasUtil, setGasUtil] = useState(0);
+  const [water, setWater] = useState(0);
+  const [internet, setInternet] = useState(0);
   const [cable, setCable] = useState(0);
-  const [subscriptions, setSubscriptions] = useState(80);
+  const [subscriptions, setSubscriptions] = useState(0);
   // Living
-  const [groceries, setGroceries] = useState(500);
-  const [diningOut, setDiningOut] = useState(200);
-  const [otherExpenses, setOtherExpenses] = useState(300);
+  const [groceries, setGroceries] = useState(0);
+  const [diningOut, setDiningOut] = useState(0);
+  const [otherExpenses, setOtherExpenses] = useState(0);
   // Debt
   const [studentLoans, setStudentLoans] = useState(0);
   const [creditCards, setCreditCards] = useState(0);
