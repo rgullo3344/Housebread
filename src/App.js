@@ -390,7 +390,7 @@ export default function HomeAffordability() {
 
             {activeInputSection === "expenses" && (
               <>
-                <Section title="Transportation" icon="🚗">
+                <Section title="Monthly Transportation Costs" icon="🚗">
                   <InputField label="Car Payment(s)" value={carPayment} onChange={setCarPayment} />
                   <InputField label="Car Insurance" value={carInsurance} onChange={setCarInsurance} />
                   <InputField label="Gas / Fuel" value={gas} onChange={setGas} />
@@ -460,7 +460,10 @@ export default function HomeAffordability() {
                   </div>
 
                   <div style={{ background: "#fdf9f4", borderRadius: "10px", padding: "0.85rem", marginBottom: "1rem", border: "1px solid #e8e0d4" }}>
-                    <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#2d2416", marginBottom: "0.6rem" }}>📈 Retirement (401k / IRA / etc.)</div>
+                    <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#2d2416", marginBottom: "0.25rem" }}>📈 Additional Retirement Savings</div>
+                    <div style={{ fontSize: "0.68rem", color: "#8a7e6e", marginBottom: "0.75rem", lineHeight: 1.5 }}>
+                      Only enter this if you save for retirement <strong>outside</strong> your paycheck — e.g. a Roth IRA or extra contributions not already deducted. If your 401k comes out of your paycheck automatically, leave this at zero to avoid double counting.
+                    </div>
                     <InputField label="Monthly Contribution" value={retirementMonthly} onChange={setRetirementMonthly} hint={`15% target: ${formatCurrency(monthlyGross * 0.15)}/mo`} />
                     <InputField label="Annual Goal" value={retirementGoal} onChange={setRetirementGoal} hint={`15% target: ${formatCurrency(income * 0.15 / 12)}/mo`} />
                   </div>
@@ -779,7 +782,7 @@ export default function HomeAffordability() {
                 <Section title="Savings Benchmarks" icon="🎯" accent="#fdf9f4">
                   {[
                     { label: "Emergency Fund (4 months)", target: totalMonthlyExpenses * 4, current: emergencyFundMonthly, icon: "🆘" },
-                    { label: "Retirement (15% of income)", target: monthlyGross * 0.15, current: retirementMonthly, unit: "/mo", icon: "📈" },
+                    { label: "Additional Retirement Savings", target: monthlyGross * 0.15, current: retirementMonthly, unit: "/mo", icon: "📈" },
                     { label: "Home Maintenance (1%/yr)", target: homePrice * 0.01 / 12, current: maintenance, unit: "/mo", icon: "🔧" },
                   ].map((b) => {
                     const onTrack = b.current >= b.target;
