@@ -243,6 +243,7 @@ export default function HomeAffordability() {
   const [activeResultTab, setActiveResultTab] = useState("overview");
 
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
+  const [breadDismissed, setBreadDismissed] = useState(false);
 
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(160deg, #fdf8f0 0%, #f5ede0 100%)", fontFamily: "'DM Sans', sans-serif" }}>
@@ -284,6 +285,36 @@ export default function HomeAffordability() {
           </div>
         </div>
       )}
+
+      {/* ── BREAD BAKING POPUP (shows once, right after the disclaimer) ── */}
+      {disclaimerAccepted && !breadDismissed && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 999, display: "flex", alignItems: "center", justifyContent: "center", padding: "1.25rem" }}>
+          <style>{`
+            @keyframes hbRise { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-6px) scale(1.08); } }
+            @keyframes hbSteam { 0% { opacity: 0; transform: translateY(6px); } 50% { opacity: 0.7; } 100% { opacity: 0; transform: translateY(-14px); } }
+          `}</style>
+          <div style={{ background: "#fff", borderRadius: "20px", maxWidth: "360px", width: "100%", overflow: "hidden", boxShadow: "0 24px 60px rgba(0,0,0,0.3)", textAlign: "center" }}>
+            <div style={{ background: "#2d2416", padding: "1.25rem 1.5rem" }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#f5ede0", fontSize: "1.2rem", margin: 0 }}>Bread Baking</h2>
+            </div>
+            <div style={{ padding: "1.75rem 1.5rem 1.5rem" }}>
+              <div style={{ position: "relative", height: "4.5rem", marginBottom: "0.75rem" }}>
+                <span style={{ position: "absolute", left: "38%", top: 0, fontSize: "1rem", animation: "hbSteam 2.4s ease-in-out infinite" }}>〰️</span>
+                <span style={{ position: "absolute", left: "52%", top: 0, fontSize: "1rem", animation: "hbSteam 2.4s ease-in-out 0.8s infinite" }}>〰️</span>
+                <span style={{ display: "inline-block", fontSize: "3.25rem", marginTop: "0.9rem", animation: "hbRise 2.4s ease-in-out infinite" }}>🍞</span>
+              </div>
+              <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.05rem", fontWeight: 700, color: "#2d2416", lineHeight: 1.5, margin: "0 0 1.5rem" }}>
+                Gotta Check on the Bread before we get that Homestead
+              </p>
+              <button onClick={() => setBreadDismissed(true)}
+                style={{ width: "100%", padding: "0.95rem", background: "#c8862a", color: "#fff", border: "none", borderRadius: "12px", fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: "0.9rem", cursor: "pointer", letterSpacing: "0.03em" }}>
+                Let's Get Started
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div style={{ background: "#2d2416", padding: "1.75rem 1.5rem 1.25rem", textAlign: "center" }}>
         <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.68rem", letterSpacing: "0.2em", color: "#8a7e6e", textTransform: "uppercase", marginBottom: "0.4rem" }}>New Home Owner Tool</p>
