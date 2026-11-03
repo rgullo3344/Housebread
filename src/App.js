@@ -253,7 +253,7 @@ export default function HomeAffordability() {
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "1.25rem" }}>
           <div style={{ background: "#fff", borderRadius: "20px", maxWidth: "420px", width: "100%", overflow: "hidden", boxShadow: "0 24px 60px rgba(0,0,0,0.3)" }}>
             <div style={{ background: "#2d2416", padding: "1.25rem 1.5rem", textAlign: "center" }}>
-              <div style={{ fontSize: "1.75rem", marginBottom: "0.4rem" }}>⚖️</div>
+              <img src={process.env.PUBLIC_URL + "/icon-512.png"} alt="House Bread" style={{ width: "72px", height: "72px", borderRadius: "16px", marginBottom: "0.4rem" }} />
               <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#f5ede0", fontSize: "1.15rem", margin: 0 }}>Important Disclaimer</h2>
             </div>
             <div style={{ padding: "1.5rem" }}>
@@ -298,10 +298,10 @@ export default function HomeAffordability() {
               <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#f5ede0", fontSize: "1.2rem", margin: 0 }}>Bread Baking</h2>
             </div>
             <div style={{ padding: "1.75rem 1.5rem 1.5rem" }}>
-              <div style={{ position: "relative", height: "4.5rem", marginBottom: "0.75rem" }}>
+              <div style={{ position: "relative", height: "5.5rem", marginBottom: "0.75rem" }}>
                 <span style={{ position: "absolute", left: "38%", top: 0, fontSize: "1rem", animation: "hbSteam 2.4s ease-in-out infinite" }}>〰️</span>
                 <span style={{ position: "absolute", left: "52%", top: 0, fontSize: "1rem", animation: "hbSteam 2.4s ease-in-out 0.8s infinite" }}>〰️</span>
-                <span style={{ display: "inline-block", fontSize: "3.25rem", marginTop: "0.9rem", animation: "hbRise 2.4s ease-in-out infinite" }}>🍞</span>
+                <img src={process.env.PUBLIC_URL + "/icon-512.png"} alt="House Bread" style={{ display: "inline-block", width: "84px", height: "84px", borderRadius: "18px", marginTop: "0.4rem", animation: "hbRise 2.4s ease-in-out infinite" }} />
               </div>
               <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.05rem", fontWeight: 700, color: "#2d2416", lineHeight: 1.5, margin: "0 0 1.5rem" }}>
                 Gotta Check on the Bread before we get that Homestead
@@ -316,10 +316,11 @@ export default function HomeAffordability() {
       )}
 
       {/* Header */}
-      <div style={{ background: "#2d2416", padding: "1.75rem 1.5rem 1.25rem", textAlign: "center" }}>
-        <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.68rem", letterSpacing: "0.2em", color: "#8a7e6e", textTransform: "uppercase", marginBottom: "0.4rem" }}>New Home Owner Tool</p>
-        <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.8rem", color: "#f5ede0", fontWeight: 700, margin: 0, lineHeight: 1.2 }}>Can I Afford This Home?</h1>
-        <p style={{ color: "#8a7e6e", fontSize: "0.8rem", marginTop: "0.4rem" }}>Your complete financial picture — before you sign</p>
+      <div style={{ background: "#2d2416", padding: "1.25rem 1.5rem 1.25rem", textAlign: "center" }}>
+        <img src={process.env.PUBLIC_URL + "/icon-512.png"} alt="House Bread logo" style={{ width: "96px", height: "96px", borderRadius: "22px", display: "block", margin: "0 auto 0.4rem" }} />
+        <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.9rem", color: "#f5ede0", fontWeight: 700, margin: 0, lineHeight: 1.2 }}>House Bread</h1>
+        <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.68rem", letterSpacing: "0.2em", color: "#c8862a", textTransform: "uppercase", margin: "0.45rem 0 0" }}>Home Affordability Calculator</p>
+        <p style={{ color: "#a89c88", fontSize: "0.85rem", fontStyle: "italic", margin: "0.4rem 0 0" }}>Know your bread, rest your head.</p>
       </div>
 
       {/* Sticky summary bar */}
@@ -857,6 +858,7 @@ export default function HomeAffordability() {
 
       {/* Footer */}
       <div style={{ textAlign: "center", padding: "1.5rem 1rem 2.5rem", borderTop: "1px solid #ede6da", marginTop: "0.5rem" }}>
+        <img src={process.env.PUBLIC_URL + "/icon-192.png"} alt="House Bread" style={{ width: "56px", height: "56px", borderRadius: "13px", display: "block", margin: "0 auto 0.6rem" }} />
         <button onClick={() => setDisclaimerAccepted(false)}
           style={{ background: "none", border: "none", fontSize: "0.68rem", color: "#b0a898", cursor: "pointer", textDecoration: "underline", fontFamily: "'DM Sans', sans-serif" }}>
           View Disclaimer
