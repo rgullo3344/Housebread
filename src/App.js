@@ -119,11 +119,16 @@ const SavingsGauge = ({ label, monthly, target, months, color, icon }) => {
 };
 
 // Reverse calculator: based on take-home pay, what's the max home price?
-// Uses a comfortable buffer (10% of take-home kept as cushion) rather than gross income ratios,
-// since the user's income is already after-tax take-home.
-function calcMaxHomePrice(monthlyTakeHome, allOtherExpenses, totalSavings, interestRate, loanTerm, propertyTax, homeInsurance, hoa, maintenance, downPayment) {
-  const cushion = monthlyTakeHome * 0.10; // keep 10% as breathing room
-  const budgetForHousing = Math.max(0, monthlyTakeHome - allOtherExpenses - totalSavings - cushion);
+// Two guardrails keep the number from getting too high:
+//  1) a cushion: a % of take-home that must be left over after ALL expenses, savings and housing
+//  2) a cap: total housing cost (mortgage + tax + insurance + HOA + maintenance) can never exceed a % of take-home
+// The smaller of the two limits wins.
+function calcMaxHomePrice(monthlyTakeHome, allOtherExpenses, totalSavings, interestRate, loanTerm, propertyTax, homeInsurance, hoa, maintenance, downPayment, cushionPct = 0.15, capPct = 0.35) {
+  const cushion = monthlyTakeHome * cushionPct;
+  const byCushion = monthlyTakeHome - allOtherExpenses - totalSavings - cushion;
+  const byCap = monthlyTakeHome * capPct;
+  const budgetForHousing = Math.max(0, Math.min(byCushion, byCap));
+  const cappedByRatio = byCap < byCushion;
   const fixedHomeCosts = propertyTax + homeInsurance + hoa + maintenance;
   const maxMortgagePayment = Math.max(0, budgetForHousing - fixedHomeCosts);
   const monthlyRate = interestRate / 100 / 12;
@@ -134,7 +139,7 @@ function calcMaxHomePrice(monthlyTakeHome, allOtherExpenses, totalSavings, inter
   } else if (maxMortgagePayment > 0) {
     maxLoan = maxMortgagePayment * numPayments;
   }
-  return { maxPrice: Math.max(0, maxLoan + downPayment), maxMortgagePayment, budgetForHousing, cushion };
+  return { maxPrice: Math.max(0, maxLoan + downPayment), maxMortgagePayment, budgetForHousing, cushion, cappedByRatio };
 }
 
 export default function HomeAffordability() {
@@ -214,13 +219,6 @@ export default function HomeAffordability() {
   const totalDebtRatio = monthlyGross > 0 ? ((totalHousingCost + totalDebtPayments + totalTransport) / monthlyGross) * 100 : 0;
   const downPaymentPct = homePrice > 0 ? ((downPayment / homePrice) * 100).toFixed(1) : 0;
 
-  // Reverse calc
-  const reverseCalc = calcMaxHomePrice(
-    monthlyGross,
-    totalTransport + totalBills + totalLiving + totalDebtPayments,
-    totalSavings,
-    interestRate, loanTerm, propertyTax, homeInsurance, hoa, maintenance, downPayment
-  );
   const getRating = () => {
     // Use remaining budget as the primary signal — it's the most honest indicator.
     // DTI ratios shown as context, not as pass/fail gates.
@@ -655,29 +653,18 @@ export default function HomeAffordability() {
                 {(() => {
                   const otherFixed = totalTransport + totalBills + totalLiving + totalDebtPayments + totalSavings;
 
-                  // Conservative: keep 20% cushion
-                  const consBudget20 = Math.max(0, monthlyGross - otherFixed - monthlyGross * 0.20);
-                  const consFixed = propertyTax + homeInsurance + hoa + maintenance;
-                  const consMortgage20 = Math.max(0, consBudget20 - consFixed);
-                  const mr0 = interestRate / 100 / 12;
-                  const np0 = loanTerm * 12;
-                  const consLoan20 = mr0 > 0 && consMortgage20 > 0 ? consMortgage20 * (Math.pow(1+mr0,np0)-1)/(mr0*Math.pow(1+mr0,np0)) : consMortgage20 * np0;
-                  const consPrice20 = Math.max(0, consLoan20 + downPayment);
-                  // Comfortable: 10% cushion (default)
-                  const comfortableCalc = reverseCalc;
-                  // Stretch: 5% cushion
-                  const stretchBudget = Math.max(0, monthlyGross - otherFixed - monthlyGross * 0.05);
-                  const stretchFixed = propertyTax + homeInsurance + hoa + maintenance;
-                  const stretchMortgage = Math.max(0, stretchBudget - stretchFixed);
-                  const mr = interestRate / 100 / 12;
-                  const np = loanTerm * 12;
-                  const stretchLoan = mr > 0 && stretchMortgage > 0 ? stretchMortgage * (Math.pow(1+mr,np)-1)/(mr*Math.pow(1+mr,np)) : stretchMortgage * np;
-                  const stretchPrice = Math.max(0, stretchLoan + downPayment);
+                  const otherExpenses = totalTransport + totalBills + totalLiving + totalDebtPayments;
+                  const calcTier = (cushionPct, capPct) =>
+                    calcMaxHomePrice(monthlyGross, otherExpenses, totalSavings, interestRate, loanTerm, propertyTax, homeInsurance, hoa, maintenance, downPayment, cushionPct, capPct);
+                  const consCalc = calcTier(0.25, 0.30);
+                  const comfCalc = calcTier(0.15, 0.35);
+                  const stretchCalc = calcTier(0.10, 0.40);
+                  const missingCosts = propertyTax + homeInsurance <= 0;
 
                   const tiers = [
-                    { label: "Conservative", sublabel: "20% cushion kept", price: consPrice20, mortgage: consMortgage20, leftover: monthlyGross - otherFixed - consBudget20, color: "#3d9e6e", bg: "#edf7f2", border: "#c3e8d4", icon: "🟢" },
-                    { label: "Comfortable", sublabel: "10% cushion kept", price: comfortableCalc.maxPrice, mortgage: comfortableCalc.maxMortgagePayment, leftover: monthlyGross - otherFixed - comfortableCalc.budgetForHousing, color: "#4a7fa5", bg: "#eef4fa", border: "#b8d4ea", icon: "🔵" },
-                    { label: "Stretch", sublabel: "5% cushion kept", price: stretchPrice, mortgage: stretchMortgage, leftover: monthlyGross * 0.05, color: "#c8862a", bg: "#fdf3e3", border: "#f0d4a8", icon: "🟡" },
+                    { label: "Conservative", sublabel: "Recommended starting point · keep 25% of take-home free · housing ≤ 30%", price: consCalc.maxPrice, mortgage: consCalc.maxMortgagePayment, leftover: monthlyGross - otherFixed - consCalc.budgetForHousing, color: "#3d9e6e", bg: "#edf7f2", border: "#c3e8d4", icon: "🟢" },
+                    { label: "Comfortable", sublabel: "Keep 15% of take-home free · housing ≤ 35%", price: comfCalc.maxPrice, mortgage: comfCalc.maxMortgagePayment, leftover: monthlyGross - otherFixed - comfCalc.budgetForHousing, color: "#4a7fa5", bg: "#eef4fa", border: "#b8d4ea", icon: "🔵" },
+                    { label: "Stretch", sublabel: "Upper limit — not recommended · keep 10% free · housing ≤ 40%", price: stretchCalc.maxPrice, mortgage: stretchCalc.maxMortgagePayment, leftover: monthlyGross - otherFixed - stretchCalc.budgetForHousing, color: "#c8862a", bg: "#fdf3e3", border: "#f0d4a8", icon: "🟡" },
                   ];
 
                   return (
@@ -685,6 +672,17 @@ export default function HomeAffordability() {
                       <div style={{ background: "#2d2416", borderRadius: "14px", padding: "1rem 1.25rem", marginBottom: "1.25rem", textAlign: "center" }}>
                         <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.68rem", letterSpacing: "0.14em", color: "#8a7e6e", textTransform: "uppercase", margin: "0 0 0.3rem" }}>Based on your take-home & expenses</p>
                         <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "1rem", color: "#f5ede0", fontWeight: 700, margin: 0 }}>Here's what you can afford at three comfort levels</p>
+                      </div>
+
+                      <div style={{ background: "#fdf3e3", border: "1.5px solid #f0d4a8", borderRadius: "12px", padding: "0.8rem 1rem", marginBottom: "1rem" }}>
+                        <p style={{ fontSize: "0.76rem", color: "#5c4e3a", margin: 0, lineHeight: 1.6 }}>
+                          <strong>Aim for Conservative.</strong> A lender may approve you for more than you should actually spend. These numbers keep a real cushion for repairs, rate changes and life, and cap total housing cost as a share of your take-home pay.
+                        </p>
+                        {missingCosts && (
+                          <p style={{ fontSize: "0.76rem", color: "#c0392b", margin: "0.5rem 0 0", lineHeight: 1.6, fontWeight: 600 }}>
+                            ⚠ Property tax and insurance are $0, so these prices are too high. Enter them under Home to get a realistic number.
+                          </p>
+                        )}
                       </div>
 
                       {tiers.map((tier) => (
@@ -731,7 +729,11 @@ export default function HomeAffordability() {
                         ))}
                       </Section>
 
-                      <Section title="Your Current Home vs. These Ranges" icon="📏">
+                      <p style={{ fontSize: "0.7rem", color: "#8a7e6e", lineHeight: 1.6, margin: "0 0 1rem" }}>
+                        Estimates don't include closing costs (typically 2–5% of the price), moving costs or first-year repairs. Keep cash for those on top of your down payment.
+                      </p>
+
+                      <Section title="Your Home vs. These Ranges" icon="📏">
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.5rem 0", borderBottom: "1px solid #f0ebe2" }}>
                           <span style={{ fontSize: "0.82rem", color: "#5c4e3a", fontWeight: 600 }}>Your home price</span>
                           <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.9rem", fontWeight: 700, color: "#2d2416" }}>{formatCurrency(homePrice)}</span>
