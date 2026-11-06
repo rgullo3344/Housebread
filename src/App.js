@@ -405,10 +405,10 @@ export default function HomeAffordability() {
                 </Section>
 
                 <Section title="Home Ownership Costs" icon="🏠">
-                  <InputField label="Property Tax (monthly)" value={propertyTax} onChange={setPropertyTax} />
-                  <InputField label="Homeowners Insurance" value={homeInsurance} onChange={setHomeInsurance} />
-                  <InputField label="HOA Fees" value={hoa} onChange={setHoa} hint="Enter 0 if none" />
-                  <InputField label="Maintenance Reserve" value={maintenance} onChange={setMaintenance} hint="~1% of home value/year recommended" />
+                  <InputField label="Property Tax (Monthly)" value={propertyTax} onChange={setPropertyTax} />
+                  <InputField label="Homeowners Insurance (Monthly)" value={homeInsurance} onChange={setHomeInsurance} />
+                  <InputField label="HOA Fees (Monthly)" value={hoa} onChange={setHoa} hint="Enter 0 if none" />
+                  <InputField label="Maintenance Reserve (Monthly)" value={maintenance} onChange={setMaintenance} hint="~1% of home value/year recommended" />
                 </Section>
 
                 <button onClick={() => setActiveInputSection("expenses")}
@@ -421,19 +421,19 @@ export default function HomeAffordability() {
             {activeInputSection === "expenses" && (
               <>
                 <Section title="Monthly Transportation Costs" icon="🚗">
-                  <InputField label="Car Payment(s)" value={carPayment} onChange={setCarPayment} />
-                  <InputField label="Car Insurance" value={carInsurance} onChange={setCarInsurance} />
-                  <InputField label="Gas / Fuel" value={gas} onChange={setGas} />
+                  <InputField label="Car Payment(s) (Monthly)" value={carPayment} onChange={setCarPayment} />
+                  <InputField label="Car Insurance (Monthly)" value={carInsurance} onChange={setCarInsurance} />
+                  <InputField label="Gas / Fuel (Monthly)" value={gas} onChange={setGas} />
                 </Section>
 
                 <Section title="Monthly Bills" icon="📱">
-                  <InputField label="Phone Bill" value={phone} onChange={setPhone} />
-                  <InputField label="Electric Bill" value={electric} onChange={setElectric} />
-                  <InputField label="Gas Bill" value={gasUtil} onChange={setGasUtil} />
-                  <InputField label="Water Bill" value={water} onChange={setWater} />
-                  <InputField label="Internet" value={internet} onChange={setInternet} />
-                  <InputField label="Cable / TV" value={cable} onChange={setCable} hint="Enter 0 if none" />
-                  <InputField label="Streaming & Subscriptions" value={subscriptions} onChange={setSubscriptions} />
+                  <InputField label="Phone Bill (Monthly)" value={phone} onChange={setPhone} />
+                  <InputField label="Electric Bill (Monthly)" value={electric} onChange={setElectric} />
+                  <InputField label="Gas Bill (Monthly)" value={gasUtil} onChange={setGasUtil} />
+                  <InputField label="Water Bill (Monthly)" value={water} onChange={setWater} />
+                  <InputField label="Internet (Monthly)" value={internet} onChange={setInternet} />
+                  <InputField label="Cable / TV (Monthly)" value={cable} onChange={setCable} hint="Enter 0 if none" />
+                  <InputField label="Streaming & Subscriptions (Monthly)" value={subscriptions} onChange={setSubscriptions} />
                   <div style={{ padding: "0.5rem 0.85rem", background: "#fdf9f4", borderRadius: "8px", display: "flex", justifyContent: "space-between", border: "1px solid #e8e0d4" }}>
                     <span style={{ fontSize: "0.78rem", color: "#8a7e6e", fontWeight: 600 }}>Total Monthly Bills</span>
                     <span style={{ fontFamily: "'DM Mono', monospace", fontWeight: 700, fontSize: "0.88rem", color: "#2d2416" }}>{formatCurrency(totalBills)}</span>
@@ -441,9 +441,9 @@ export default function HomeAffordability() {
                 </Section>
 
                 <Section title="Living Expenses" icon="🛒">
-                  <InputField label="Groceries" value={groceries} onChange={setGroceries} />
-                  <InputField label="Dining Out / Takeout" value={diningOut} onChange={setDiningOut} />
-                  <InputField label="Other (clothing, medical, etc.)" value={otherExpenses} onChange={setOtherExpenses} />
+                  <InputField label="Groceries (Monthly)" value={groceries} onChange={setGroceries} />
+                  <InputField label="Dining Out / Takeout (Monthly)" value={diningOut} onChange={setDiningOut} />
+                  <InputField label="Other (clothing, medical, etc.) (Monthly)" value={otherExpenses} onChange={setOtherExpenses} />
                 </Section>
 
                 <button onClick={() => setActiveInputSection("debt")}
@@ -459,9 +459,9 @@ export default function HomeAffordability() {
                   <p style={{ fontSize: "0.75rem", color: "#8a7e6e", marginTop: 0, marginBottom: "1rem", lineHeight: 1.5 }}>
                     These count toward your debt-to-income ratio and directly affect what lenders will approve.
                   </p>
-                  <InputField label="Student Loan Payment(s)" value={studentLoans} onChange={setStudentLoans} hint="Monthly minimum payment" />
-                  <InputField label="Credit Card Minimums" value={creditCards} onChange={setCreditCards} hint="Enter your minimum monthly payment (not your balance). If you pay in full each month, enter your typical monthly spend." />
-                  <InputField label="Other Debt (personal loans, etc.)" value={otherDebt} onChange={setOtherDebt} />
+                  <InputField label="Student Loan Payment(s) (Monthly)" value={studentLoans} onChange={setStudentLoans} hint="Monthly minimum payment" />
+                  <InputField label="Credit Card Minimums (Monthly)" value={creditCards} onChange={setCreditCards} hint="Enter your minimum monthly payment (not your balance). If you pay in full each month, enter your typical monthly spend." />
+                  <InputField label="Other Debt (personal loans, etc.) (Monthly)" value={otherDebt} onChange={setOtherDebt} />
                   <div style={{ padding: "0.6rem 0.85rem", background: "#fdecea", borderRadius: "8px", display: "flex", justifyContent: "space-between", border: "1px solid #f5c6c0" }}>
                     <span style={{ fontSize: "0.78rem", color: "#c0392b", fontWeight: 600 }}>Total Monthly Debt</span>
                     <span style={{ fontFamily: "'DM Mono', monospace", fontWeight: 700, fontSize: "0.88rem", color: "#c0392b" }}>{formatCurrency(totalDebtPayments)}</span>
@@ -553,8 +553,8 @@ export default function HomeAffordability() {
                   </p>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginBottom: "1rem" }}>
                     {[
-                      { label: "Housing Ratio", val: housingRatio, conservative: 28, flexible: 36, desc: "of take-home on housing" },
-                      { label: "Total DTI", val: totalDebtRatio, conservative: 36, flexible: 50, desc: "of take-home on all debt" },
+                      { label: "Housing Ratio", val: housingRatio, conservative: 28, flexible: 36, desc: "of monthly take-home on housing" },
+                      { label: "Debt-to-Income (DTI)", val: totalDebtRatio, conservative: 36, flexible: 50, desc: "of monthly take-home on housing, car and debt payments" },
                     ].map((r) => {
                       const color = r.val <= r.conservative ? "#3d9e6e" : r.val <= r.flexible ? "#c8862a" : "#c0392b";
                       const pct = Math.min(r.val / (r.flexible * 1.2) * 100, 100);
@@ -573,6 +573,32 @@ export default function HomeAffordability() {
                       );
                     })}
                   </div>
+                  {[
+                    {
+                      title: "Housing Ratio — what it means",
+                      body: [
+                        "Your housing ratio is the share of your monthly take-home pay that goes to the home itself: mortgage payment, property tax, homeowners insurance, HOA fees and the maintenance reserve.",
+                        "Example: if you take home $5,000 a month and housing costs $1,500, your housing ratio is 30%. The lower it is, the more room you have left for everything else in life.",
+                        "A common guideline is to stay at or under about 28%. Many people go higher, but a higher housing ratio means less left over for repairs, savings and surprises.",
+                      ],
+                    },
+                    {
+                      title: "DTI (Debt-to-Income Ratio) — what it means",
+                      body: [
+                        "DTI stands for Debt-to-Income ratio. It is the share of your monthly income that is already spoken for by fixed obligations: your housing cost plus your car payment, car insurance, gas, student loans, credit card minimums and other debt payments.",
+                        "Example: if you take home $5,000 a month and these obligations add up to $2,000, your DTI is 40%.",
+                        "Mortgage lenders look at DTI closely to decide how much they will lend you. They usually divide by your pre-tax (gross) income and count only debt payments, so a lender's number will usually be lower than the one shown here. This app uses your take-home pay and includes your car costs, which makes it a more cautious, real-world check.",
+                        "Common markers: 36% or less is considered conservative, and many lenders will approve up to 43–50%. Just because a lender approves you does not mean it is comfortable. What matters most is what is left over each month.",
+                      ],
+                    },
+                  ].map((e) => (
+                    <div key={e.title} style={{ background: "#fdf9f4", border: "1.5px solid #e8e0d4", borderRadius: "10px", padding: "0.85rem 1rem", marginBottom: "0.75rem" }}>
+                      <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "0.88rem", fontWeight: 700, color: "#2d2416", margin: "0 0 0.4rem" }}>{e.title}</p>
+                      {e.body.map((t, i) => (
+                        <p key={i} style={{ fontSize: "0.74rem", color: "#5c4e3a", margin: "0.35rem 0 0", lineHeight: 1.6 }}>{t}</p>
+                      ))}
+                    </div>
+                  ))}
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.6rem" }}>
                     {[
                       { label: "Take-Home / mo", val: formatCurrency(monthlyGross) },
